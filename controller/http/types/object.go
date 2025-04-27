@@ -21,15 +21,15 @@ func CreatePostObjectHandlerRequest(r *http.Request) (*PostObjectHandlerRequest,
 }
 
 type GetObjectHandlerRequest struct {
-	domain.Task
+	ID string `json:"task_id"`
 }
 
 func CreateGetObjectHandlerRequest(r *http.Request) (*GetObjectHandlerRequest, error) {
-	var req GetObjectHandlerRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		return nil, fmt.Errorf("error while decode json: %v", err)
+	ID := r.URL.Query().Get("ID")
+	if ID == "" {
+		return nil, fmt.Errorf("missing key")
 	}
-	return &req, nil
+	return &GetObjectHandlerRequest{ID: ID}, nil
 }
 
 type GetObjectHandlerResponse struct {

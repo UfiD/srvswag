@@ -2,6 +2,7 @@ package main
 
 import (
 	controller "codeproc/controller/http"
+	_ "codeproc/docs"
 	"codeproc/infrastructure/consumer/codeprocessor"
 	"codeproc/infrastructure/repository/ram_storage"
 	pkgHttp "codeproc/pkg/http"

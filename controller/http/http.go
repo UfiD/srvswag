@@ -8,23 +8,17 @@ import (
 	"github.com/go-chi/chi"
 )
 
+// Object represents an HTTP handler for managing objects.
 type Controller struct {
 	uc usecases.Object
 }
 
+// New creates a new instance of Controller
 func New(uc usecases.Object) *Controller {
 	return &Controller{
 		uc: uc,
 	}
 }
-
-/*func (c *Controller) register(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func (c *Controller) auth(w http.ResponseWriter, r *http.Request) {
-
-}*/
 
 // @Summary Отправка кода и названия языка программирования
 // @Description Создание новой задачи, старт работы обработчика.
@@ -35,8 +29,7 @@ func (c *Controller) auth(w http.ResponseWriter, r *http.Request) {
 // @Param Object body types.PostObjectHandlerRequest true "Task and language name"
 // @Success 200 {string} string "Код успешно загружен"
 // @Failure 400 {string} string "Bad request"
-// @Router /task/ [post]
-
+// @Router / [post]
 func (c *Controller) post(w http.ResponseWriter, r *http.Request) {
 	req, err := types.CreatePostObjectHandlerRequest(r)
 	if err != nil {
@@ -53,12 +46,11 @@ func (c *Controller) post(w http.ResponseWriter, r *http.Request) {
 // @Tags object
 // @Accept  json
 // @Produce json
-// @Param Object body types.GetObjectHandlerRequest true "task_id"
-// @Success 200 {string} string
+// @Param ID query string true "task_id"
+// @Success 200 {string} types.GetObjectHandlerResponse
 // @Failuer 404 {string} string "Object not found"
 // @Failure 400 {string} string "Bad request"
-// @Router /task/status [get]
-
+// @Router /status [get]
 func (c *Controller) getStatus(w http.ResponseWriter, r *http.Request) {
 	req, err := types.CreateGetObjectHandlerRequest(r)
 	if err != nil {
@@ -74,12 +66,11 @@ func (c *Controller) getStatus(w http.ResponseWriter, r *http.Request) {
 // @Tags object
 // @Accept  json
 // @Produce json
-// @Param Object body types.GetObjectHandlerRequest true "task_id"
-// @Success 200 {string} string
+// @Param ID query string true "task_id"
+// @Success 200 {string} types.GetObjectHandlerResponse
 // @Failuer 404 {string} string "Object not found"
 // @Failure 400 {string} string "Bad request"
-// @Router /task/result [get]
-
+// @Router /result [get]
 func (c *Controller) getResult(w http.ResponseWriter, r *http.Request) {
 	req, err := types.CreateGetObjectHandlerRequest(r)
 	if err != nil {
@@ -90,10 +81,9 @@ func (c *Controller) getResult(w http.ResponseWriter, r *http.Request) {
 	types.ProcessError(w, err, &types.GetObjectHandlerResponse{ID: "", Status: "", Result: result})
 }
 
+// WithObjectHandlers registers object-related HTTP handlers.
 func (c *Controller) WithObjectHandler(r chi.Router) {
 	r.Route("/task", func(r chi.Router) {
-		//r.Post("/register", c.register)
-		//r.Post("/login", c.auth)
 		r.Post("/", c.post)
 		r.Get("/status", c.getStatus)
 		r.Get("/result", c.getResult)

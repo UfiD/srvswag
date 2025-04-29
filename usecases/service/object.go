@@ -20,7 +20,7 @@ func NewObject(repo repository.Object, consumer consumer.Object) *Object {
 
 func (uc *Object) Do(id string) {
 	result := uc.consumer.Do()
-	uc.repo.Commit(id, result)
+	uc.repo.Put(id, result)
 }
 
 func (uc *Object) Post(code, compiler string) string {

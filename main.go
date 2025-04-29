@@ -5,8 +5,10 @@ import (
 	_ "codeproc/docs"
 	"codeproc/infrastructure/consumer/codeprocessor"
 	"codeproc/infrastructure/repository/ram_storage"
+	sessionstorage "codeproc/infrastructure/repository/session_storage"
 	pkgHttp "codeproc/pkg/http"
 	"codeproc/usecases/service"
+	"codeproc/usecases/session"
 	"flag"
 	"log"
 
@@ -27,7 +29,10 @@ func main() {
 	storage := ram_storage.NewStorage()
 	consumer := codeprocessor.NewConsumer()
 	service := service.NewObject(storage, consumer)
-	server := controller.New(service)
+	userstore := sessionstorage.NewObject()
+	sessionstore := sessionstorage.NewSessionStorage()
+	manager := session.NewObject(userstore, sessionstore, 3600)
+	server := controller.New(service, manager)
 
 	r := chi.NewRouter()
 	r.Get("/swagger/*", httpSwagger.WrapHandler)

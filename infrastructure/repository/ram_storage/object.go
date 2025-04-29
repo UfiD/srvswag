@@ -2,8 +2,6 @@ package ram_storage
 
 import "codeproc/infrastructure/repository"
 
-type status int
-
 type task struct {
 	code     string
 	compiler string
@@ -51,7 +49,7 @@ func (s *storage) GetResult(id string) (string, error) {
 	return s.task[id].result, nil
 }
 
-func (s *storage) Commit(id, result string) {
+func (s *storage) Put(id, result string) {
 	s.task[id].status = "Ready"
 	s.task[id].result = result
 }

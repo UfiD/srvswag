@@ -9,3 +9,7 @@ type Userdata struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
+
+type Task struct {
+	ID string `json:"task_id"`
+}

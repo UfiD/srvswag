@@ -36,10 +36,12 @@ func (c *Controller) post(w http.ResponseWriter, r *http.Request) {
 	sid, err := types.CreateAuthHeader(r)
 	if err != nil {
 		http.Error(w, "Session token is invalid", http.StatusUnauthorized)
+		return
 	}
 	err = c.m.SessionRead(sid)
 	if err != nil {
 		http.Error(w, "Session token is invalid", http.StatusUnauthorized)
+		return
 	}
 	req, err := types.CreatePostObjectHandlerRequest(r)
 	if err != nil {
@@ -65,14 +67,16 @@ func (c *Controller) getStatus(w http.ResponseWriter, r *http.Request) {
 	sid, err := types.CreateAuthHeader(r)
 	if err != nil {
 		http.Error(w, "Session token is invalid", http.StatusUnauthorized)
+		return
 	}
 	err = c.m.SessionRead(sid)
 	if err != nil {
 		http.Error(w, "Session token is invalid", http.StatusUnauthorized)
+		return
 	}
 	req, err := types.CreateGetObjectHandlerRequest(r)
 	if err != nil {
-		http.Error(w, "Bad request", http.StatusBadRequest)
+		http.Error(w, "Bad request u are pussy", http.StatusBadRequest)
 		return
 	}
 	status, err := c.uc.GetStatus(req.ID)
@@ -93,10 +97,12 @@ func (c *Controller) getResult(w http.ResponseWriter, r *http.Request) {
 	sid, err := types.CreateAuthHeader(r)
 	if err != nil {
 		http.Error(w, "Session token is invalid", http.StatusUnauthorized)
+		return
 	}
 	err = c.m.SessionRead(sid)
 	if err != nil {
 		http.Error(w, "Session token is invalid", http.StatusUnauthorized)
+		return
 	}
 	req, err := types.CreateGetObjectHandlerRequest(r)
 	if err != nil {
@@ -129,10 +135,10 @@ func (c *Controller) signIn(w http.ResponseWriter, r *http.Request) {
 
 // WithObjectHandlers registers object-related HTTP handlers.
 func (c *Controller) WithObjectHandler(r chi.Router) {
-	r.Route("/", func(r chi.Router) {
-		r.Post("signup", c.signUp)
-		r.Post("signin", c.signIn)
-	})
+
+	r.Post("/signup", c.signUp)
+	r.Post("/signin", c.signIn)
+
 	r.Route("/task", func(r chi.Router) {
 		r.Post("/", c.post)
 		r.Get("/status", c.getStatus)

@@ -14,22 +14,26 @@ type PostObjectHandlerRequest struct {
 
 func CreatePostObjectHandlerRequest(r *http.Request) (*PostObjectHandlerRequest, error) {
 	var req PostObjectHandlerRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	d := json.NewDecoder(r.Body)
+	d.DisallowUnknownFields()
+	if err := d.Decode(&req); err != nil {
 		return nil, fmt.Errorf("error while decode json: %v", err)
 	}
 	return &req, nil
 }
 
 type GetObjectHandlerRequest struct {
-	ID string `json:"task_id"`
+	domain.Task
 }
 
 func CreateGetObjectHandlerRequest(r *http.Request) (*GetObjectHandlerRequest, error) {
-	ID := r.URL.Query().Get("ID")
-	if ID == "" {
-		return nil, fmt.Errorf("missing key")
+	var req GetObjectHandlerRequest
+	d := json.NewDecoder(r.Body)
+	d.DisallowUnknownFields()
+	if err := d.Decode(&req); err != nil {
+		return nil, fmt.Errorf("error while decoding json: %v", err)
 	}
-	return &GetObjectHandlerRequest{ID: ID}, nil
+	return &req, nil
 }
 
 type GetObjectHandlerResponse struct {
@@ -45,7 +49,9 @@ type PostAuthObjectHandlerRequest struct {
 
 func CreatePostAuthObjectHandlerRequest(r *http.Request) (*PostAuthObjectHandlerRequest, error) {
 	var req PostAuthObjectHandlerRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	d := json.NewDecoder(r.Body)
+	d.DisallowUnknownFields()
+	if err := d.Decode(&req); err != nil {
 		return nil, fmt.Errorf("error while decoding json: %v", err)
 	}
 	return &req, nil

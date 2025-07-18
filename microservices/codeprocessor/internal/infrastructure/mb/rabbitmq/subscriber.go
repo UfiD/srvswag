@@ -11,6 +11,7 @@ type RabbitMQSubscriber struct {
 	connection *amqp.Connection
 	channel    *amqp.Channel
 	queueName  string
+	msgs       <-chan amqp.Delivery
 }
 
 func NewRabbitMQSubscriber(cfg config.RabbitMQSubscriber) (*RabbitMQSubscriber, error) {
@@ -37,9 +38,23 @@ func NewRabbitMQSubscriber(cfg config.RabbitMQSubscriber) (*RabbitMQSubscriber, 
 		return nil, err
 	}
 
+	msgs, err := ch.Consume(
+		cfg.QueueName,
+		"",
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	return &RabbitMQSubscriber{
 		connection: conn,
 		channel:    ch,
 		queueName:  cfg.QueueName,
+		msgs:       msgs,
 	}, nil
 }

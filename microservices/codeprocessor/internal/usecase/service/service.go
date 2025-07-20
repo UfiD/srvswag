@@ -6,13 +6,13 @@ import (
 )
 
 type usecase struct {
-	rmp mb.TaskPublisher
-	rms mb.TaskResultSubscriber
+	rmp mb.TaskResultPublisher
+	rms mb.TaskSubscriber
 	d   domain.Object
 }
 
-func NewUsecase(rmp mb.TaskPublisher,
-	rms mb.TaskResultSubscriber,
+func NewUsecase(rmp mb.TaskResultPublisher,
+	rms mb.TaskSubscriber,
 	d domain.Object) *usecase {
 	return &usecase{
 		rmp: rmp,
@@ -22,11 +22,5 @@ func NewUsecase(rmp mb.TaskPublisher,
 }
 
 func (uc *usecase) Start() {
-	for {
-
-	}
-}
-
-func (uc *usecase) Consume() {
-
+	uc.rms.SubscribeResults()
 }

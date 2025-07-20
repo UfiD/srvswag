@@ -2,10 +2,10 @@ package mb
 
 import domain "codeproc/microservices/codeprocessor/internal/domain/entity"
 
-type TaskPublisher interface {
+type TaskResultPublisher interface {
 	Publish(object domain.ObjectResult) error
 }
 
-type TaskResultSubscriber interface {
+type TaskSubscriber interface {
 	SubscribeResults()
 }
